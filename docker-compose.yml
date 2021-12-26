@@ -19,6 +19,8 @@ services:
   chz-transaction-monitor-mongodb:
     image: mongo:5.0
     restart: always
+    ports: 
+      - 27017:27017
     container_name: chz-transaction-monitor-mongodb
     environment:
       TERM: xterm-256color
