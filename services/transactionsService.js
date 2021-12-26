@@ -42,6 +42,18 @@ class TransactionsService extends Service {
 
     return transfers
   }
+
+  /**
+   * Returns true if transaction with hash transactionHash
+   * is related to the token contract
+   * @async
+   * @param {string} transactionHash - Transaction hash
+   */
+  async isTokenTransaction (transactionHash) {
+    const transactionReceipt = await this.web3.eth.getTransactionReceipt(transactionHash)
+    const tokenTransfers = await this.getTransfers(transactionReceipt)
+    return tokenTransfers.length > 0
+  }
 }
 
 module.exports = TransactionsService
