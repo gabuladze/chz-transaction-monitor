@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  file: ['./test/teardown.js',],
+  file: ['./test/setup.js', './test/teardown.js',],
 };
