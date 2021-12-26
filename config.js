@@ -6,8 +6,9 @@ module.exports = {
   MONGODB: {
     USERNAME: process.env.MONGODB_USERNAME,
     PASSWORD: process.env.MONGODB_PASSWORD,
-    HOST: process.env.MONGODB_OST,
-    PORT: process.env.MONGODB_ORT
+    HOST: process.env.MONGODB_HOST,
+    PORT: process.env.MONGODB_PORT,
+    DB_NAME: process.env.DB_NAME
   },
   ETH_NODE: {
     INFURA_URL: process.env.INFURA_URL,
