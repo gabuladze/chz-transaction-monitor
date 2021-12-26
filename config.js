@@ -8,7 +8,7 @@ module.exports = {
     PASSWORD: process.env.MONGODB_PASSWORD,
     HOST: process.env.MONGODB_HOST,
     PORT: process.env.MONGODB_PORT,
-    DB_NAME: process.env.DB_NAME
+    DB_NAME: process.env.MONGODB_DBNAME
   },
   ETH_NODE: {
     INFURA_URL: process.env.INFURA_URL,
