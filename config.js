@@ -3,6 +3,12 @@ require('dotenv').config()
 module.exports = {
   NODE_ENV: process.env.NODE_ENV || 'dev',
   APP_PORT: process.env.APP_PORT || 8000,
+  MONGODB: {
+    USERNAME: process.env.MONGODB_USERNAME,
+    PASSWORD: process.env.MONGODB_PASSWORD,
+    HOST: process.env.MONGODB_OST,
+    PORT: process.env.MONGODB_ORT
+  },
   ETH_NODE: {
     INFURA_URL: process.env.INFURA_URL,
     WS_PORT: process.env.WS_PORT,
