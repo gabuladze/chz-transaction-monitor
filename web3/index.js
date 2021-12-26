@@ -1,6 +1,7 @@
 const Web3 = require('web3')
 const { ETH_NODE } = require('../config')
 const {
+  INFURA_URL,
   WS_PORT,
   WS_HOST,
   WS_PROVIDER_TIMEOUT,
@@ -12,7 +13,7 @@ const {
 
 class Web3Singleton {
   async build () {
-    const url = `ws://${WS_HOST}:${WS_PORT}`
+    const url = WS_HOST && WS_PORT ? `ws://${WS_HOST}:${WS_PORT}` : INFURA_URL
     const options = {
       timeout: WS_PROVIDER_TIMEOUT, // ms
       clientConfig: {
