@@ -4,7 +4,7 @@
   "description": "Node.js app for monitoring transactions that interract with CHZ smart contract on ETH network",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "Giorgi Abuladze (https://abula.dev)",
   "license": "ISC",
