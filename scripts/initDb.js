@@ -1,18 +1,15 @@
 const mongo = require('../db')
 const { MONGODB } = require('../config')
+const db = mongo.db(MONGODB.DB_NAME)
 
+/**
+ * Resets processedBlocks collection
+ */
 const run = async () => {
-  await mongo.db(MONGODB.DB_NAME).collection('state').deleteMany()
-  await mongo.db(MONGODB.DB_NAME).collection('state').insertOne({
-    processedBlocks: {},
-    processedBlocksCounter: 0,
-    lastBlockNumber: null,
-    totalTokensTransfered: {
-      pending: 0,
-      confirmed: 0
-    }
-  })
-  console.log('App state has been initialzied!')
+  const collections = await db.collections({ filter: { name: 'processedBlocks' }, nameOnly: true })
+  if (collections.length > 0) await db.collection('processedBlocks').drop()
+  await mongo.db(MONGODB.DB_NAME).createCollection('processedBlocks', { capped: true, max: 10, size: 100000000 })
+
   return true
 }
 
