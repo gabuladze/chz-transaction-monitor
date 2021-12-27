@@ -18,7 +18,13 @@ class TransactionsService extends Service {
     const transferLogs = transactionReceipt.logs.filter((log) => log.address.toLowerCase() === TOKEN.CONTRACT_ADDRESS && log.topics[0] === TOKEN.TOPIC_HASH.Transfer)
     if (transferLogs.length === 0) return []
 
-    const transfers = []
+    const result = {
+      transfers: [],
+      totalTokensTransfered: {
+        native: 0,
+        [TOKEN.SYMBOL.toLowerCase()]: 0
+      }
+    }
     for (let i = 0; i < transferLogs.length; i++) {
       const transferLog = transferLogs[i]
 
@@ -37,10 +43,12 @@ class TransactionsService extends Service {
         }
       }
 
-      transfers.push(transfer)
+      result.transfers.push(transfer)
+      result.totalTokensTransfered.native = Decimal.add(result.totalTokensTransfered.native, tokenAmountNative).toNumber()
+      result.totalTokensTransfered[TOKEN.SYMBOL.toLowerCase()] = Decimal.add(result.totalTokensTransfered[TOKEN.SYMBOL.toLowerCase()], tokenAmount).toNumber()
     }
 
-    return transfers
+    return result
   }
 
   /**
