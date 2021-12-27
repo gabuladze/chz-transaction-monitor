@@ -1,7 +1,8 @@
 const chai = require('chai')
 
 const { expect } = chai
-const Web3Singleton = require('../web3')
+const mongo = require('../db')
+const web3Singleton = require('../web3')
 const TransactionsService = require('../services/transactionsService')
 
 let TransactionsServiceInstance = null
@@ -9,8 +10,8 @@ let web3 = null // web3 instance
 
 describe('Test TransactionsService', function () {
   before(async function () {
-    web3 = await Web3Singleton.getInstance()
-    TransactionsServiceInstance = new TransactionsService({ web3 })
+    web3 = await web3Singleton.getInstance()
+    TransactionsServiceInstance = new TransactionsService({ web3, mongo })
   })
 
   describe('#getTransfers', function () {
@@ -35,7 +36,9 @@ describe('Test TransactionsService', function () {
 
       const result = await TransactionsServiceInstance.getTransfers(testTransactionReceipt)
 
-      expect(result).to.be.an('array')
+      expect(result).to.have.property('totalTokensTransfered').that.is.an('object')
+      expect(result.totalTokensTransfered).to.have.property('native').that.is.a('number')
+      expect(result.totalTokensTransfered).to.have.property('chz').that.is.a('number')
       for (let i = 0; i < result.length; i++) {
         assertTransferObject(result[i], expected)
       }
@@ -53,7 +56,9 @@ describe('Test TransactionsService', function () {
 
       const result = await TransactionsServiceInstance.getTransfers(testTransactionReceipt)
 
-      expect(result).to.be.an('array')
+      expect(result).to.have.property('totalTokensTransfered').that.is.an('object')
+      expect(result.totalTokensTransfered).to.have.property('native').that.is.a('number')
+      expect(result.totalTokensTransfered).to.have.property('chz').that.is.a('number')
       for (let i = 0; i < result.length; i++) {
         assertTransferObject(result[i], expected)
       }
