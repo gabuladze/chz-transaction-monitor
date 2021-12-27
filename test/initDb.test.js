@@ -28,4 +28,13 @@ describe('Test initDb', function () {
     expect(collections.length).to.be.greaterThan(0)
     expect(processedBlocksDocumentCount).to.equal(0)
   })
+
+  it('must drop transacitons collection ', async function () {
+    await db.collection('transactions').insertOne({ test: true })
+
+    await initDb.run()
+    const transactionDocumentCount = await db.collection('transactions').countDocuments({})
+
+    expect(transactionDocumentCount).to.equal(0)
+  })
 })
