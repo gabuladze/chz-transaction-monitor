@@ -1,9 +1,27 @@
 const Decimal = require('decimal.js')
 const Service = require('./service.js')
 const IERC20 = require('../abis/IERC20')
-const { TOKEN } = require('../config')
+const { TOKEN, MONGODB } = require('../config')
 
 class TransactionsService extends Service {
+  /**
+   * Saves token transaction to db
+   * @async
+   * @param {Object} transactionReceipt - Transaction receipt
+   */
+  async processTransaction (transactionReceipt) {
+    const transfersResult = await this.getTransfers(transactionReceipt)
+    if (transfersResult.transfers.length === 0) return true
+
+    // Save totalChzTransfered in transaction receipt
+    transactionReceipt.totalTokensTransfered = transfersResult.totalTokensTransfered
+
+    // Save transaction to db
+    await this.mongo.db(MONGODB.DB_NAME).collection('transactions').insertOne(transactionReceipt)
+
+    return true
+  }
+
   /**
    * Returns transfer data from transactionReceipt.logs
    * @async
@@ -14,10 +32,6 @@ class TransactionsService extends Service {
     const Contract = new this.web3.eth.Contract(IERC20, TOKEN.CONTRACT_ADDRESS)
     const decimals = await Contract.methods.decimals().call()
 
-    // Index 0 is always topic hash, indexes 1-3 contain indexed params of the log
-    const transferLogs = transactionReceipt.logs.filter((log) => log.address.toLowerCase() === TOKEN.CONTRACT_ADDRESS && log.topics[0] === TOKEN.TOPIC_HASH.Transfer)
-    if (transferLogs.length === 0) return []
-
     const result = {
       transfers: [],
       totalTokensTransfered: {
@@ -25,6 +39,11 @@ class TransactionsService extends Service {
         [TOKEN.SYMBOL.toLowerCase()]: 0
       }
     }
+
+    // Index 0 is always topic hash, indexes 1-3 contain indexed params of the log
+    const transferLogs = transactionReceipt.logs.filter((log) => log.address.toLowerCase() === TOKEN.CONTRACT_ADDRESS && log.topics[0] === TOKEN.TOPIC_HASH.Transfer)
+    if (transferLogs.length === 0) return result
+
     for (let i = 0; i < transferLogs.length; i++) {
       const transferLog = transferLogs[i]
 
