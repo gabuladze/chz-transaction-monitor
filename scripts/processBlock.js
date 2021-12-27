@@ -1,16 +1,16 @@
-const Web3Singleton = require('../web3')
+const web3Singleton = require('../web3')
+const mongo = require('../db')
+const { MONGODB } = require('../config')
+const db = mongo.db(MONGODB.DB_NAME)
 
-const RUN_DELAY = 10000
-
-const STATE = {
-  processedBlocks: {},
-  lastBlockNumber: null
-}
+const RUN_DELAY = 3000
 
 const run = async () => {
-  const web3 = await Web3Singleton.getInstance()
+  const web3 = await web3Singleton.getInstance()
 
-  const blockNumber = STATE.lastBlockNumber ? Number(STATE.lastBlockNumber) + 1 : await web3.eth.getBlockNumber()
+  const lastProcessedBlock = await db.collection('processedBlocks').findOne({}, { sort: { $natural: -1 } })
+
+  const blockNumber = lastProcessedBlock ? Number(lastProcessedBlock.height) + 1 : await web3.eth.getBlockNumber()
 
   const blockData = await web3.eth.getBlock(blockNumber)
   // If getBlock returns falsy value (null),
@@ -31,8 +31,7 @@ const run = async () => {
   }
 
   // Block has been processed successfully, add it to processedBlocks
-  STATE.processedBlocks[blockNumber] = true
-  STATE.lastBlockNumber = blockNumber
+  await db.collection('processedBlocks').insertOne({ height: blockNumber, hash: blockData.hash, parentHash: blockData.parentHash })
 
   return setTimeout(run, RUN_DELAY)
 }
