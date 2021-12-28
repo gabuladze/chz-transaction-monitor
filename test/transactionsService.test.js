@@ -141,4 +141,13 @@ describe('Test TransactionsService', function () {
       expect(transactionDbRecord).to.equal(null)
     })
   })
+
+  describe('#getTotalTokensTransferedSinceStart', function () {
+    it('must return array of transfers for contract transaction', async function () {
+      const result = await TransactionsServiceInstance.getTotalTokensTransferedSinceStart()
+
+      expect(result).to.have.property('totalTokensTransfered').that.is.a('number').greaterThanOrEqual(0)
+      expect(result).to.have.property('totalTokensTransferedNative').that.is.a('number').greaterThanOrEqual(0)
+    })
+  })
 })
