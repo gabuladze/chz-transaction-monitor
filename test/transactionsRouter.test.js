@@ -35,4 +35,14 @@ describe('Test TransactionsRouter', function () {
       expect(response.body).to.have.property('isTokenTransaction', false)
     })
   })
+
+  describe('GET /api/transactions/totals', function () {
+    it('must return total tokens transfered', async function () {
+      const response = await chai.request(app).get('/api/transactions/totals')
+
+      expect(response).to.have.status(200)
+      expect(response.body).to.have.property('totalTokensTransfered').that.is.a('number').greaterThanOrEqual(0)
+      expect(response.body).to.have.property('totalTokensTransferedNative').that.is.a('number').greaterThanOrEqual(0)
+    })
+  })
 })
