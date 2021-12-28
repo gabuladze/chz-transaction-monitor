@@ -100,9 +100,16 @@ class TransactionsService extends Service {
    * @param {string} transactionHash - Transaction hash
    */
   async isTokenTransaction (transactionHash) {
+    // The transactions collection only includes transactions that interract with token contract
+    const dbTxCount = await this.mongo.db(MONGODB.DB_NAME).collection('transactions').countDocuments({ transactionHash })
+
+    if (dbTxCount > 0) return true
+
+    // If transaction happens to be older than the app, ask the node
     const transactionReceipt = await this.web3.eth.getTransactionReceipt(transactionHash)
-    const tokenTransfers = await this.getTransfers(transactionReceipt)
-    return tokenTransfers.length > 0
+    const tokenTransfersResult = await this.getTransfers(transactionReceipt)
+
+    return tokenTransfersResult.transfers.length > 0
   }
 }
 
