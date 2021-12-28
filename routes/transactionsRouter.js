@@ -18,4 +18,16 @@ TransactionsRouter.get('/check/:transactionHash', async (req, res, next) => {
   }
 })
 
+// Returns number of total tokens transfered since the start of the app
+TransactionsRouter.get('/totals', async (req, res, next) => {
+  try {
+    const web3 = await Web3Singleton.getInstance()
+    const totals = await new TransactionsService({ web3, mongo }).getTotalTokensTransferedSinceStart()
+
+    return res.json(totals)
+  } catch (error) {
+    return next(error)
+  }
+})
+
 module.exports = TransactionsRouter
