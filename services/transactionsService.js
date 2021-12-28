@@ -111,6 +111,40 @@ class TransactionsService extends Service {
 
     return tokenTransfersResult.transfers.length > 0
   }
+
+  /**
+   * Returns total tokens transfered since the start of the app
+   */
+  async getTotalTokensTransferedSinceStart () {
+    const symbol = TOKEN.SYMBOL.toLowerCase()
+    const aggregationResult = await this.mongo.db(MONGODB.DB_NAME).collection('transactions').aggregate([
+      {
+        $group: {
+          _id: '',
+          totalTokensTransfered: {
+            $sum: `$totalTokensTransfered.${symbol}`
+          },
+          totalTokensTransferedNative: {
+            $sum: '$totalTokensTransfered.native'
+          }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalTokensTransfered: '$totalTokensTransfered',
+          totalTokensTransferedNative: '$totalTokensTransferedNative'
+        }
+      }
+    ]).toArray()
+
+    const emptyResult = {
+      totalTokensTransfered: 0,
+      totalTokensTransferedNative: 0
+    }
+
+    return aggregationResult.length > 0 ? aggregationResult[0] : emptyResult
+  }
 }
 
 module.exports = TransactionsService
