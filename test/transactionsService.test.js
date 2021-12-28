@@ -143,7 +143,7 @@ describe('Test TransactionsService', function () {
   })
 
   describe('#getTotalTokensTransferedSinceStart', function () {
-    it('must return array of transfers for contract transaction', async function () {
+    it('must return total tokens transfered', async function () {
       const result = await TransactionsServiceInstance.getTotalTokensTransferedSinceStart()
 
       expect(result).to.have.property('totalTokensTransfered').that.is.a('number').greaterThanOrEqual(0)
