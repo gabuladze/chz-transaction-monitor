@@ -1,6 +1,6 @@
 version: "3"
 services:
-  chz-transaction-monitor:
+  chz-transaction-monitor-1:
     build:
       context: .
       dockerfile: Dockerfile.dev
@@ -8,7 +8,7 @@ services:
       - "8000"
     ports:
       - 3003:8000
-    container_name: chz-transaction-monitor
+    container_name: chz-transaction-monitor-1
     volumes:
       - .:/usr/src/app
     environment:
@@ -16,12 +16,11 @@ services:
     env_file:
       - .env
 
-  chz-transaction-monitor-mongodb:
+  chz-transaction-monitor-mongodb-1:
     image: mongo:5.0
-    restart: always
     ports: 
       - 27017:27017
-    container_name: chz-transaction-monitor-mongodb
+    container_name: chz-transaction-monitor-mongodb-1
     environment:
       TERM: xterm-256color
       MONGO_INITDB_ROOT_USERNAME: root
