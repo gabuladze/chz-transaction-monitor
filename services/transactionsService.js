@@ -6,22 +6,28 @@ const { TOKEN, MONGODB } = require('../config')
 class TransactionsService extends Service {
   /**
    * Retrieves transaction receipts for specified hashes
-   * and binds processTransactionReceiptResponse to each request response
+   * and calls processTransactionReceipt for each of them
    * @async
    * @param {string[]} transactionHashes - Array of transaction hashes
    */
   async processTransactions (transactionHashes) {
-    const batchRequest = new this.web3.BatchRequest()
-    console.log(`Creating batch request for ${transactionHashes.length} transactions`)
+    const requestPromises = []
+    console.log(`Fetching receipts for ${transactionHashes.length} transactions`)
 
     for (let i = 0; i < transactionHashes.length; i++) {
       const hash = transactionHashes[i]
-      batchRequest.add(
-        this.web3.eth.getTransactionReceipt.request(hash, this.processTransactionReceiptResponse.bind(this))
-      )
+      requestPromises.push(this.web3.eth.getTransactionReceipt(hash))
     }
 
-    await batchRequest.execute()
+    const receipts = await Promise.all(requestPromises)
+
+    console.log(`Processing ${transactionHashes.length} transaction receipts`)
+    const processPromises = []
+    for (let i = 0; i < receipts.length; i++) {
+      processPromises.push(this.processTransactionReceipt(null, receipts[i]))
+    }
+
+    await Promise.all(processPromises)
   }
 
   /**
@@ -29,10 +35,7 @@ class TransactionsService extends Service {
    * @async
    * @param {Object} transactionReceipt - Transaction receipt
    */
-  async processTransactionReceiptResponse (error, transactionReceipt) {
-    if (error) {
-      console.log('Error when fetching transaction receipt:', error.stack)
-    }
+  async processTransactionReceipt (transactionReceipt) {
     const transfersResult = await this.getTransfers(transactionReceipt)
     if (transfersResult.transfers.length === 0) return true
 
