@@ -97,7 +97,7 @@ describe('Test TransactionsService', function () {
     })
   })
 
-  describe('#processTransactionReceiptResponse', function () {
+  describe('#processTransactionReceipt', function () {
     const assert = (result, transactionDbRecord) => {
       expect(result).to.equal(true)
       expect(transactionDbRecord).to.have.property('totalTokensTransfered').that.is.an('object')
@@ -109,7 +109,7 @@ describe('Test TransactionsService', function () {
       const testTransactionHash = '0x0a388d3d8b5a5b9d622af074911e3bf88ed7249a3935d24c25d01ea66ea55986'
       const testTransactionReceipt = await web3.eth.getTransactionReceipt(testTransactionHash)
 
-      const result = await TransactionsServiceInstance.processTransactionReceiptResponse(testTransactionReceipt)
+      const result = await TransactionsServiceInstance.processTransactionReceipt(testTransactionReceipt)
       const transactionDbRecord = await mongo.db(MONGODB.DB_NAME).collection('transactions')
         .findOne({ transactionHash: testTransactionReceipt.transactionHash })
       transactionsToDelete.push(testTransactionReceipt.transactionHash)
@@ -121,7 +121,7 @@ describe('Test TransactionsService', function () {
       const testTransactionHash = '0x52c550eaf791bd69821dc42d2a17ade9c97cc0a660e45619865a69b11b02dac0'
       const testTransactionReceipt = await web3.eth.getTransactionReceipt(testTransactionHash)
 
-      const result = await TransactionsServiceInstance.processTransactionReceiptResponse(testTransactionReceipt)
+      const result = await TransactionsServiceInstance.processTransactionReceipt(testTransactionReceipt)
       const transactionDbRecord = await mongo.db(MONGODB.DB_NAME).collection('transactions')
         .findOne({ transactionHash: testTransactionReceipt.transactionHash })
       transactionsToDelete.push(testTransactionReceipt.transactionHash)
@@ -133,7 +133,7 @@ describe('Test TransactionsService', function () {
       const testTransactionHash = '0x0181c3e08abf4814ce65f762c4fde475fa6bf79df467bd5f0afba881dc287715'
       const testTransactionReceipt = await web3.eth.getTransactionReceipt(testTransactionHash)
 
-      const result = await TransactionsServiceInstance.processTransactionReceiptResponse(testTransactionReceipt)
+      const result = await TransactionsServiceInstance.processTransactionReceipt(testTransactionReceipt)
       const transactionDbRecord = await mongo.db(MONGODB.DB_NAME).collection('transactions')
         .findOne({ transactionHash: testTransactionReceipt.transactionHash })
 
