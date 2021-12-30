@@ -3,14 +3,14 @@ services:
   chz-transaction-monitor-1:
     build:
       context: .
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     expose:
       - "8000"
     ports:
       - 3003:8000
     container_name: chz-transaction-monitor-1
-    volumes:
-      - .:/usr/src/app
+    # volumes:
+    #   - .:/usr/src/app
     environment:
       TERM: xterm-256color
     env_file:
