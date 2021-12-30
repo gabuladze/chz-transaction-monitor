@@ -36,6 +36,7 @@ The app uses:
 - Mocha, chai, chai-http for tests
 - Docker, docker-compose
 - MongoDB for storing transactions & app state
+- swagger-ui-express for providing swagger ui of the OpenAPI definition of the API
 
 The app looks at every transaction in each block and picks out transactions that interact with contract specified in `config.js` (CHZ by default).  
 The script that processes blocks supports small chain reorganizations, bigger reorgs can be supported by keeping track of more blocks in db.  
@@ -99,6 +100,8 @@ To run the app:
 3. Run `npm start`
 
 # API Reference
+
+You can visit the swagger ui at `http://localhost:3003/api-reference`. Or see the details below:
 
 ## Retrieve the total amount of CHZ transferred (since the start of the program)
 
