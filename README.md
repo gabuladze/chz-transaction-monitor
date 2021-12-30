@@ -42,6 +42,13 @@ The app looks at every transaction in each block and picks out transactions that
 The script that processes blocks supports small chain reorganizations, bigger reorgs can be supported by keeping track of more blocks in db.  
 The code in `services/TransactionsService.js` can identify [account]->[CHZ contract] transactions as well as transactions with internal contract transfers (account->[Some smart contract]->[CHZ smart contract]).
 
+**Since this is just a test task, I don't see a point in going super in-depth and spending a lot of time polishing the app. But there are a few points that have to be made. The next steps I would take for optimizing the app would be:**
+
+- Add multi-document transactions for consecutive db insert operations.
+  - With current implementation, db insert operations in the `processBlock` script are not atomic. If the script fails somewhere in the middle, same transactions can be inserted more than once, resulting in incorrect results in `getTotalTokensTransferedSinceStart` function's aggregation pipeline.
+- Split the app into two services: one with `processBlock` script and the other with HTTP server for API endpoints
+  - Reason for this is that in some cases `processBlock` could block current thread and make the request to API endoints timeout.
+
 # Setup
 
 ## 1. Create .env file
