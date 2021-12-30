@@ -1,3 +1,22 @@
+# Table of Contents
+
+- [Problem Statement](#problem-statement)
+- [Solution Overview](#solution-overview)
+- [Setup](#setup)
+  - [1. Create .env file](#1.-create-.env-file)
+  - [1.1 Extra configuration parameters](#1.1-extra-configuration-parameters)
+  - [2. Start the app](#2.-start-the-app)
+    - [Start with docker-compose](#start-with-docker-compose)
+    - [Start without docker-compose](#start-without-docker-compose)
+- [API Reference](#api-reference)
+  - [Retrieve the total amount of CHZ transferred (since the start of the program)](<#retrieve-the-total-amount-of-chz-transferred-(since-the-start-of-the-program)>)
+  - [Check whether a transaction is interacting with the CHZ token smart contract or not given its transaction hash (transaction older than the program is possible)](<check-whether-a-transaction-is-interacting-with-the-chz-token-smart-contract-or-not-given-its-transaction-hash-(transaction-older-than-the-program-is-possible)>)
+- [Tests](#tests)
+
+---
+
+---
+
 # Problem Statement
 
 Write a NodeJs program that could index the Ethereum blockchain in real-time. Watch and store any new transactions interacting with the CHZ token smart contract (0x3506424f91fd33084466f402d5d97f05f8e3b4af).
