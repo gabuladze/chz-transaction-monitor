@@ -130,7 +130,7 @@ To run the app:
 
 # Tests
 
-I've included few simple tests in the `test` folder. The tests use mocha, chai & chai-http. To run them run:
+I've included few simple tests in the `test` folder. The tests follow the _Arrange-Act-Assert_ pattern and use mocha, chai & chai-http. To run them run:
 
 ```
 npm test
