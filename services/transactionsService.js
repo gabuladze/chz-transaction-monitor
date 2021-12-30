@@ -55,9 +55,6 @@ class TransactionsService extends Service {
    * @returns array containing transfer data extracted from transaction logs
    */
   async getTransfers (transactionReceipt) {
-    if (!transactionReceipt) {
-      console.log(transactionReceipt)
-    }
     const Contract = new this.web3.eth.Contract(IERC20, TOKEN.CONTRACT_ADDRESS)
     const decimals = await Contract.methods.decimals().call()
 
@@ -68,6 +65,8 @@ class TransactionsService extends Service {
         [TOKEN.SYMBOL.toLowerCase()]: 0
       }
     }
+
+    if (transactionReceipt.logs.length === 0) return result
 
     // Index 0 is always topic hash, indexes 1-3 contain indexed params of the log
     const transferLogs = transactionReceipt.logs.filter((log) => log.address.toLowerCase() === TOKEN.CONTRACT_ADDRESS && log.topics[0] === TOKEN.TOPIC_HASH.Transfer)
@@ -113,6 +112,8 @@ class TransactionsService extends Service {
 
     // If transaction happens to be older than the app, ask the node
     const transactionReceipt = await this.web3.eth.getTransactionReceipt(transactionHash)
+    if (!transactionReceipt) throw new Error('ERR_TRANSACTION_NOT_FOUND')
+
     const tokenTransfersResult = await this.getTransfers(transactionReceipt)
 
     return tokenTransfersResult.transfers.length > 0
