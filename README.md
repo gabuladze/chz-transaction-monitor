@@ -32,7 +32,7 @@ You can use the `.env.example` provided in the repo. Run:
 cp .env.example .env
 ```
 
-**After this make sure to populate the .env variables with correct values.**
+**After this make sure to populate the `WS_HOST` and `WS_PORT` or only `INFURA_URL` env variables with correct values. The rest of the values provided in .env.example will work.**
 
 | Parameter        | Description         | Default Value |
 | ---------------- | ------------------- | ------------- |
@@ -40,15 +40,13 @@ cp .env.example .env
 | WS_HOST          | Geth WS server host |               |
 | WS_PORT          | Geth WS server port |               |
 | INFURA_URL       | Infura url          |               |
-| MONGODB_USERNAME | MongoDB Username\*  |               |
-| MONGODB_PASSWORD | MongoDB Password\*  |               |
-| MONGODB_HOST     | MongoDB Host\*      |               |
-| MONGODB_PORT     | MongoDB Port\*      |               |
-| MONGODB_DBNAME   | MongoDB Db name\*   |               |
+| MONGODB_USERNAME | MongoDB Username    |               |
+| MONGODB_PASSWORD | MongoDB Password    |               |
+| MONGODB_HOST     | MongoDB Host        |               |
+| MONGODB_PORT     | MongoDB Port        |               |
+| MONGODB_DBNAME   | MongoDB Db name     |               |
 
 **When connecting to Geth, the app will look for WS_HOST & WS_PORT variables first, if they are not specified the app will fall back to INFURA_URL**
-
-**Values provided for MONGODB\_\* env variables in .env.example are sufficient to run the app**
 
 ### 1.1 Extra configuration parameters
 
