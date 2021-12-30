@@ -24,7 +24,7 @@ class TransactionsService extends Service {
     console.log(`Processing ${transactionHashes.length} transaction receipts`)
     const processPromises = []
     for (let i = 0; i < receipts.length; i++) {
-      processPromises.push(this.processTransactionReceipt(null, receipts[i]))
+      processPromises.push(this.processTransactionReceipt(receipts[i]))
     }
 
     await Promise.all(processPromises)
@@ -55,6 +55,9 @@ class TransactionsService extends Service {
    * @returns array containing transfer data extracted from transaction logs
    */
   async getTransfers (transactionReceipt) {
+    if (!transactionReceipt) {
+      console.log(transactionReceipt)
+    }
     const Contract = new this.web3.eth.Contract(IERC20, TOKEN.CONTRACT_ADDRESS)
     const decimals = await Contract.methods.decimals().call()
 
